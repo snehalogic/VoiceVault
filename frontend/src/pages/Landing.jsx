@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Decorative animated waveform
 function Waveform() {
   const ref = useRef(null);
 

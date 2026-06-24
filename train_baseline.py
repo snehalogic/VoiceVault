@@ -1,22 +1,3 @@
-"""
-VoiceVault — Day 4: Baseline Classifier Training
---------------------------------------------------
-Loads the MFCC features extracted in Day 3, trains a Random Forest and
-an SVM classifier, evaluates both on the dev split, and saves the best
-model to disk.
-
-Why two models?
-  - Random Forest: fast to train, no feature scaling needed, gives us a
-    quick sanity check that features are actually informative.
-  - SVM (RBF kernel): typically stronger on MFCC features, but needs
-    StandardScaler first since it's sensitive to feature magnitude.
-
-Both use class_weight='balanced' to handle the 10:1 spoof/bonafide
-imbalance in the dataset.
-
-Run with:
-    python train_baseline.py
-"""
 
 from pathlib import Path
 import numpy as np
@@ -32,17 +13,11 @@ from sklearn.metrics import (
     confusion_matrix,
 )
 
-# -----------------------------------------------------------------------
-# 1. CONFIG
-# -----------------------------------------------------------------------
 FEATURES_DIR = Path(r"D:\VoiceVault\features")
 MODELS_DIR   = Path(r"D:\VoiceVault\models")
 MODELS_DIR.mkdir(exist_ok=True)
 
 
-# -----------------------------------------------------------------------
-# 2. Load features
-# -----------------------------------------------------------------------
 def load_features():
     print("Loading features from disk...")
     X       = np.load(FEATURES_DIR / "features.npy")
@@ -67,9 +42,6 @@ def load_features():
     return X_train, y_train, X_dev, y_dev
 
 
-# -----------------------------------------------------------------------
-# 3. Evaluate a trained model and print a clean report
-# -----------------------------------------------------------------------
 def evaluate(model, X, y, scaler=None, model_name="Model"):
     X_input = scaler.transform(X) if scaler else X
     y_pred  = model.predict(X_input)
@@ -99,9 +71,6 @@ def evaluate(model, X, y, scaler=None, model_name="Model"):
     return acc, auc
 
 
-# -----------------------------------------------------------------------
-# 4. Main
-# -----------------------------------------------------------------------
 def main():
     X_train, y_train, X_dev, y_dev = load_features()
 
@@ -114,9 +83,6 @@ def main():
     joblib.dump(scaler, MODELS_DIR / "scaler.pkl")
     print("  Scaler saved.")
 
-    # ---------------------------------------------------------------
-    # Model A: Random Forest (no scaling needed, using raw features)
-    # ---------------------------------------------------------------
     print("\nTraining Random Forest...")
     print("  (100 trees, balanced class weights — takes ~1-2 minutes)")
     rf = RandomForestClassifier(
@@ -133,9 +99,7 @@ def main():
     joblib.dump(rf, MODELS_DIR / "random_forest.pkl")
     print("  Random Forest model saved.")
 
-    # ---------------------------------------------------------------
-    # Model B: SVM with RBF kernel (uses scaled features)
-    # ---------------------------------------------------------------
+
     print("\nTraining SVM (RBF kernel)...")
     print("  (This takes longer than RF — roughly 5-15 minutes on 50k chunks)")
     svm = SVC(
@@ -153,9 +117,6 @@ def main():
     joblib.dump(svm, MODELS_DIR / "svm.pkl")
     print("  SVM model saved.")
 
-    # ---------------------------------------------------------------
-    # Summary: pick best model
-    # ---------------------------------------------------------------
     print(f"\n{'='*55}")
     print("  SUMMARY")
     print(f"{'='*55}")

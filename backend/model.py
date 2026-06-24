@@ -1,9 +1,3 @@
-"""
-VoiceVault — model.py
-----------------------
-RawNet2 architecture definition.
-Must match the Colab training code exactly so saved weights load correctly.
-"""
 
 import numpy as np
 import torch

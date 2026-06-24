@@ -7,7 +7,6 @@ export default function Uploader({ onFileSelected }) {
   const handleFile = useCallback((file) => {
     if (!file) return;
     const validTypes = ["audio/wav", "audio/mpeg", "audio/flac", "audio/ogg", "audio/mp4", "audio/x-m4a"];
-    // Also allow by extension since MIME types can be inconsistent
     const validExts = [".wav", ".mp3", ".flac", ".ogg", ".m4a"];
     const ext = "." + file.name.split(".").pop().toLowerCase();
 

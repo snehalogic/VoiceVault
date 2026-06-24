@@ -1,7 +1,3 @@
-# VoiceVault — Week 1 dependencies
-# (PyTorch / FastAPI added in Week 2 & 3)
-# No strict version pins — letting pip resolve the latest versions
-# compatible with your installed Python version.
 
 librosa         # audio loading, MFCCs, mel-spectrograms
 soundfile       # reading/writing audio files (used internally by librosa)

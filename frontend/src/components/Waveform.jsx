@@ -8,7 +8,6 @@ export default function Waveform({ audioURL, chunks }) {
   useEffect(() => {
     if (!containerRef.current || !audioURL) return;
 
-    // Destroy previous instance if it exists
     if (wavesurferRef.current) {
       wavesurferRef.current.destroy();
     }

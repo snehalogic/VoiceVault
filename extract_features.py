@@ -1,21 +1,3 @@
-"""
-VoiceVault — Day 3: Feature Extraction
------------------------------------------
-Reads dataset_index.csv (built in Day 2), and for every audio file:
-  1. Loads it, resampled to 16kHz mono
-  2. Trims leading/trailing silence
-  3. Slices it into non-overlapping 3-second chunks (padding the last
-     chunk with zeros if needed)
-  4. Extracts MFCC features per chunk, summarized as mean + std
-
-Outputs three files into D:\VoiceVault\features\:
-  - features.npy  : feature matrix, shape (num_chunks, 80)
-  - labels.npy    : 0 = bonafide (real), 1 = spoof (fake), shape (num_chunks,)
-  - meta.csv      : filename, split, chunk_idx, label  (row-aligned with the above)
-
-Run with:
-    python extract_features.py
-"""
 
 from pathlib import Path
 import numpy as np
@@ -23,9 +5,6 @@ import pandas as pd
 import librosa
 from tqdm import tqdm
 
-# -----------------------------------------------------------------------
-# 1. CONFIG
-# -----------------------------------------------------------------------
 INDEX_CSV     = Path(r"D:\VoiceVault\dataset_index.csv")
 OUTPUT_DIR    = Path(r"D:\VoiceVault\features")
 OUTPUT_DIR.mkdir(exist_ok=True)
@@ -36,21 +15,12 @@ CHUNK_SAMPLES        = int(SAMPLE_RATE * CHUNK_SECONDS)   # = 48000 samples
 MIN_REMAINDER_RATIO  = 0.3     # keep trailing partial chunk only if >= 30% full
 N_MFCC               = 40      # number of MFCC coefficients per frame
 
-# Only train + dev for now. Add "eval" later when testing on unseen attacks.
 SPLITS_TO_PROCESS = ["train", "dev"]
 
 # Label encoding: 0 = real, 1 = fake
 LABEL_MAP = {"bonafide": 0, "spoof": 1}
 
-
-# -----------------------------------------------------------------------
-# 2. Load audio and slice into fixed-length chunks
-# -----------------------------------------------------------------------
 def load_and_chunk(file_path: str) -> list:
-    """
-    Returns a list of numpy arrays, each exactly CHUNK_SAMPLES long.
-    If the clip is shorter than one chunk it is zero-padded to fit.
-    """
     audio, _ = librosa.load(file_path, sr=SAMPLE_RATE, mono=True)
 
     # Trim leading / trailing silence
@@ -77,29 +47,13 @@ def load_and_chunk(file_path: str) -> list:
     return chunks
 
 
-# -----------------------------------------------------------------------
-# 3. Extract a fixed-length feature vector from one chunk
-# -----------------------------------------------------------------------
 def extract_features(chunk: np.ndarray) -> np.ndarray:
-    """
-    Computes 40 MFCCs across the chunk, then takes their mean and std
-    over time -> returns a single vector of length 80.
-
-    Why mean + std?
-    MFCCs change frame-by-frame, giving a 2D matrix. Taking mean and
-    std collapses it to a fixed-size 1D vector that still captures
-    both the average spectral shape (mean) and how much it varies (std).
-    SVM / Random Forest need this fixed-size vector as input.
-    """
+   
     mfcc = librosa.feature.mfcc(y=chunk, sr=SAMPLE_RATE, n_mfcc=N_MFCC)
     mfcc_mean = mfcc.mean(axis=1)   # shape: (40,)
     mfcc_std  = mfcc.std(axis=1)    # shape: (40,)
     return np.concatenate([mfcc_mean, mfcc_std])  # shape: (80,)
 
-
-# -----------------------------------------------------------------------
-# 4. Main
-# -----------------------------------------------------------------------
 def main():
     index_df = pd.read_csv(INDEX_CSV)
     index_df = index_df[index_df["split"].isin(SPLITS_TO_PROCESS)].reset_index(drop=True)
