@@ -116,7 +116,7 @@ The trained model file (`rawnet2_best.pt`, 254MB) is not included in this reposi
 Follow the Colab training notebook in the `colab/` directory using the ASVspoof 2019 LA dataset from [Kaggle](https://www.kaggle.com/datasets/awsaf49/asvpoof-2019-dataset).
 
 **Option B — Download directly:**
-[Google Drive link — add your link here after uploading]
+[Google Drive link — (https://drive.google.com/file/d/1PfPn5NZ-dyej-bF6pT8jKp74FRC0fds7/view?usp=sharing)]
 
 Place the file at `backend/rawnet2_best.pt` before starting the backend.
 
