@@ -1,0 +1,15 @@
+# VoiceVault — Week 1 dependencies
+# (PyTorch / FastAPI added in Week 2 & 3)
+# No strict version pins — letting pip resolve the latest versions
+# compatible with your installed Python version.
+
+librosa         # audio loading, MFCCs, mel-spectrograms
+soundfile       # reading/writing audio files (used internally by librosa)
+pydub           # audio format conversion, silence trimming helpers
+numpy           # numerical arrays
+scipy           # signal processing utilities
+scikit-learn    # baseline SVM / Random Forest classifier
+pandas          # protocol file parsing, dataset bookkeeping
+matplotlib      # plotting spectrograms / results for your report
+tqdm            # progress bars when processing thousands of files
+joblib          # saving/loading trained baseline models
