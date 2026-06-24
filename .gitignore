@@ -1,11 +1,30 @@
+# Python
 venv/
 __pycache__/
 *.pyc
-node_modules/
-frontend/dist/
+*.pyo
+
+# Model weights (too large for GitHub)
+*.pt
+*.pth
+
+# Dataset (25GB, not for GitHub)
 dataset/
 features/
-*.pt
-*.zip
 *.flac
+*.zip
 dataset_index.csv
+dev_flac.zip
+train_flac.zip
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
