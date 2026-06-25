@@ -84,12 +84,13 @@ VoiceVault/
 │       │   ├── Landing.jsx   # Landing page
 │       │   └── Detector.jsx  # Main detection UI
 │       ├── components/
-│       │   ├── Uploader.jsx  # Drag-and-drop audio upload
-│       │   ├── Waveform.jsx  # wavesurfer.js waveform display
-│       │   ├── Verdict.jsx   # Real/Fake badge + confidence bar
-│       │   └── Heatmap.jsx   # Per-chunk color-coded timeline
-│       ├── App.jsx           # React Router setup
-│       └── main.jsx          # Entry point
+│       │   ├── Uploader.jsx        # Drag-and-drop audio upload
+│       │   ├── Waveform.jsx        # wavesurfer.js waveform display
+│       │   ├── Verdict.jsx         # Real/Fake badge + confidence bar
+│       │   ├── Heatmap.jsx         # Per-chunk color-coded timeline
+│       │   └── ReportDownload.jsx  # Download Report 
+│       ├── App.jsx                 # React Router setup
+│       └── main.jsx                # Entry point
 │
 ├── build_dataset_index.py    # Parses ASVspoof protocol files → CSV index
 ├── extract_features.py       # MFCC feature extraction for baseline models
